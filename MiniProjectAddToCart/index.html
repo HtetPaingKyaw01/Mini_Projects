@@ -28,53 +28,67 @@
         .cart-img-item{
             height: 50px;
         }
+
+        .overflow{
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .addShadow{
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="">
-            <div class="row">
+            <div class="row ms-3">
                 <div class="col-8 border-end min-vh-100">
-                    <div class="d-flex justify-content-between align-items-end mt-3 mb-3">
-                        <div class="">
-                            <h4 class="text-primary mb-0">AmIGod</h4>
-                            <small class="text-black-50">Bootstrap & jQuery</small>
-                        </div>
-                        <div class="d-flex">
-                            <div class="me-2">
-                                <input type="text" class=" form-control text-capitalize" id="search" placeholder="search item">
+                    <div class="overflow">
+                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-2">
+                            <div class="ms-5">
+                                <h4 class="text-primary mb-0">AmIGod</h4>
+                                <small class="text-black-50">Bootstrap & jQuery</small>
                             </div>
-                            <div class="">
-                                <select name="" class="form-select" id="category">
-                                    <option value="0">All Catagory</option>
-                                </select>
+                            <div class="d-flex">
+                                <div class="me-2">
+                                    <input type="text" class=" form-control text-capitalize" id="search" placeholder="search item">
+                                </div>
+                                <div class="">
+                                    <select name="" class="form-select" id="category">
+                                        <option value="0">All Catagory</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="products" class=" row row-cols-3">
-                        
+                        <div id="products" class=" row row-cols-3 me-2">
+                            
+                        </div>
                     </div>
                 </div>
                 <div class="col-4">
-                    <div class="d-flex justify-content-between align-items-end mt-3 mb-3">
-                        <div class="">
-                            <h4 class="text-primary mb-0">Cart</h4>
-                            <small class="text-black-50">Added Item</small>
-                        </div>
-                        <div class="d-flex">
-                            <div class=" badge rounded bg-primary d-flex justify-content-center align-items-center">
-                                <span class="item-in-cart-count">1</span>
+                    <div class="overflow">
+                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-3">
+                            <div class="">
+                                <h4 class="text-primary mb-0">Cart</h4>
+                                <small class="text-black-50">Added Item</small>
                             </div>
-                            <div class="text-primary ms-1">
-                                <i class="fas fa-cart-shopping"></i>
+                            <div class="d-flex">
+                                <div class=" badge rounded bg-primary d-flex justify-content-center align-items-center">
+                                    <span class="item-in-cart-count">0</span>
+                                </div>
+                                <div class="text-primary ms-1">
+                                    <i class="fas fa-cart-shopping"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="cart">
-                        
-                    </div>
-                    <div class="total">
-                        
+                        <div id="cart" class="me-3">
+                            
+                        </div>
+                        <div class="total bg-white position-sticky py-3 bottom-0 px-3 me-3 border">
+                            Empty Cart!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,6 +99,7 @@
     <script>
 
         let products = [];
+        let itemsInCart = 0;
 
         function toShort(str,max=50){
             if(str.length > 50){
@@ -114,16 +129,30 @@
 
         function cartTotal(){
 
-            $('.item-in-cart-count').html($('.item-in-cart-cost').length);
-
-            let total = $('.item-in-cart-cost').toArray().map(el=>el.innerText).reduce( (x,y) => Number(x)+Number(y));
+            let count = $('.item-in-cart-cost').length;
             
-            $('.total').html(`
-                <div class="d-flex justify-content-between">
-                    <h4>Total</h4>
-                    <h4 class="cart-cost-total">$ ${total}</h4>
-                </div>                           
-            `);
+            if(count > 0){
+                let total = $('.item-in-cart-cost').toArray().map(el=>el.innerText).reduce( (x,y) => Number(x)+Number(y));
+                $('.total').html(`
+                    <div class="d-flex justify-content-between align-items-center px-1">
+                        <h5>Total</h5>
+                        <h5 class="cart-cost-total">$ ${Number(total).toFixed(2)}</h5>
+                    </div>                           
+                `);
+            }else{
+                $('.total').html('Empty Cart!');
+            };
+
+            if(count >= 4){
+                $('.total').removeClass('me-3');
+                $('.total').addClass('addShadow');
+            }
+
+            if(count < 4){
+                $('.total').addClass('me-3');
+                $('.total').removeClass('addShadow');
+            }
+
         }
 
         $.get('https://fakestoreapi.com/products',function(data){
@@ -167,14 +196,14 @@
             let productInfo = products.filter( el => el.id == currentItemId)[0];
 
             if($('.item-in-cart').toArray().map(el => el.getAttribute("data-id")).includes(currentItemId)){
-                alert('hello');
+                alert('Already Added');
             }else{
                 $('#cart').append(`
                     <div class="card mb-3 shadow item-in-cart" data-id="${productInfo.id}">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-end">
                                 <img src="${productInfo.image}" alt="" class="cart-img-item">
-                                <button class="btn btn-sm btn-outline-danger">
+                                <button class="btn btn-sm btn-outline-danger remove-item">
                                     <i class="fas fa-trash-can"></i>
                                 </button>
                             </div>
@@ -184,7 +213,7 @@
                                     <button class="btn btn-outline-primary quantity-minus">
                                         <i class="fas fa-minus"></i>
                                     </button>
-                                    <input type="number" class="form-control w-25 mx-2 quantity" value="1" min-value="1">
+                                    <input type="number" class="form-control w-25 mx-2 quantity" data-id='${productInfo.id}' disabled unitPrice="${productInfo.price}" value="1" min-value="1">
                                     <button class="btn btn-outline-primary quantity-plus">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -197,6 +226,52 @@
             };
 
             cartTotal();
+            itemsInCart++;
+            $('.item-in-cart-count').html(itemsInCart);
+        });
+
+        $('#cart').delegate('.remove-item','click',function(){
+            let b = $(this).parentsUntil('#cart').find('.quantity').val();
+            $(this).parentsUntil('#cart').remove();
+            cartTotal();
+            itemsInCart -= b;
+            $('.item-in-cart-count').html(itemsInCart);
+        });
+
+        $('#cart').delegate('.quantity-plus','click',function(){
+            let q = $(this).siblings('.quantity').val();
+            let p = $(this).siblings('.quantity').attr('unitPrice');
+            let newQ = Number(q) + 1;
+            let newCost = p * newQ;
+            itemsInCart++;
+
+            $(this).siblings('.quantity').val(newQ);
+            $(this).parent().siblings('p').find('.item-in-cart-cost').html(newCost.toFixed(2));
+
+            cartTotal();
+
+            $('.item-in-cart-count').html(itemsInCart);
+        });
+
+        $('#cart').delegate('.quantity-minus','click',function(){
+            let q = $(this).siblings('.quantity').val();
+            let p = $(this).siblings('.quantity').attr('unitPrice');
+            
+            if(q > 1){
+                let newQ = Number(q) - 1;
+                let newCost = p * newQ;
+                itemsInCart--;
+
+                $(this).siblings('.quantity').val(newQ);
+                $(this).parent().siblings('p').find('.item-in-cart-cost').html(newCost.toFixed(2));
+
+                cartTotal();
+
+                $('.item-in-cart-count').html(itemsInCart);
+            }else{
+                alert("Quantity can't be less than 1");
+            };
+
         });
 
     </script>
