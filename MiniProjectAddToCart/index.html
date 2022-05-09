@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<div class="item loader-container">
+	<i class="loader --7"></i>
+</div>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +11,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <style>
+        .loader.--6::before {
+            width: var(--size-square);
+            height: var(--size-square);
+            background-color: var(--color);
+            top: calc(50% - var(--size-square));
+            left: calc(50% - var(--size-square));
+            animation: loader-6 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+        }
+
+        @keyframes loader-6 {
+            0%, 100% {
+                transform: none;
+            }
+            
+            25% {
+                transform: translateX(100%);
+            }
+            
+            50% {
+                transform: translateX(100%) translateY(100%);
+            }
+            
+            75% {
+                transform: translateY(100%);
+            }
+        }
+        .loader-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            position: absolute;
+            background-color: white;
+            z-index: 4000;
+        }
+        .loader {
+			--color: #0d6efd;
+			--size-mid: 6vmin;
+			--size-dot: 1.5vmin;
+			--size-bar: 0.4vmin;
+			--size-square: 3vmin;
+			
+			display: block;
+			position: relative;
+			width: 50%;
+			display: grid;
+			place-items: center;
+		}
+
+		.loader::before,
+		.loader::after {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+		}
+
+		.loader.--7::before,
+		.loader.--7::after {
+			width: var(--size-square);
+			height: var(--size-square);
+			background-color: var(--color);
+		}
+
+		.loader.--7::before {
+			top: calc(50% - var(--size-square));
+			left: calc(50% - var(--size-square));
+			animation: loader-6 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+		}
+
+		.loader.--7::after {
+			top: 50%;
+			left: 50%;
+			animation: loader-7 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+		}
+
+		@keyframes loader-7 {
+			0%, 100% {
+				transform: none;
+			}
+			
+			25% {
+				transform: translateX(-100%);
+			}
+			
+			50% {
+				transform: translateX(-100%) translateY(-100%);
+			}
+			
+			75% {
+				transform: translateY(-100%);
+			}
+		}
+
         .product img{
             height: 150px;
             width: 150px;
@@ -46,9 +143,9 @@
             <div class="row ms-3">
                 <div class="col-8 border-end min-vh-100">
                     <div class="overflow">
-                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-2">
+                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-xxl-2 me-xl-5">
                             <div class="ms-5">
-                                <h4 class="text-primary mb-0">AmIGod</h4>
+                                <h4 class="text-primary mb-0 fw-bold">AmIGod</h4>
                                 <small class="text-black-50">Bootstrap & jQuery</small>
                             </div>
                             <div class="d-flex">
@@ -62,16 +159,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="products" class=" row row-cols-3 me-2">
+                        <div id="products" class=" row row-cols-3 me-xxl-2 me-xl-5">
                             
                         </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="overflow">
-                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-3">
+                        <div class="d-flex justify-content-between align-items-end mt-3 mb-3 me-xxl-3 me-xl-5">
                             <div class="">
-                                <h4 class="text-primary mb-0">Cart</h4>
+                                <h4 class="text-primary mb-0 fw-bold">Cart</h4>
                                 <small class="text-black-50">Added Item</small>
                             </div>
                             <div class="d-flex">
@@ -83,10 +180,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="cart" class="me-3">
+                        <div id="cart" class="me-xxl-3 me-xl-5">
                             
                         </div>
-                        <div class="total bg-white position-sticky py-3 bottom-0 px-3 me-3 border">
+                        <div class="total bg-white position-sticky py-3 bottom-0 px-3 me-xxl-3 me-xl-5 border">
                             Empty Cart!
                         </div>
                     </div>
@@ -114,7 +211,7 @@
                 $('#products').append(`
                     <div class="card border-0 mb-4 product">
                         <img src="${product.image}"  alt="" class="card-img-top">
-                        <div class="card-body border">
+                        <div class="card-body border ">
                             <p class="card-title text-primary fw-bold text-nowrap overflow-hidden">${product.title}</p>
                             <small class="card-text">${toShort(product.description,120)}</small>
                             <div class="d-flex justify-content-between align-items-end mt-3">
@@ -144,15 +241,27 @@
             };
 
             if(count >= 4){
-                $('.total').removeClass('me-3');
-                $('.total').addClass('addShadow');
-            }
+                $('.total').removeClass('me-xxl-3');
+                $('.total').removeClass('me-xl-5');
+                $('.total').removeClass('border');
+                $('.total').removeClass('bg-white');
+                $('.total').addClass('addShadow');              
+                $('.total').addClass('pb-3');
+                $('.total').addClass('me-xl-4');
+                $('.total').addClass('me-xxl-0');
+                $('.total').css('background-color','#e9ecef');
+            };
 
             if(count < 4){
-                $('.total').addClass('me-3');
+                $('.total').addClass('me-xxl-3');
+                $('.total').addClass('me-xl-5');
+                $('.total').addClass('border');
+                $('.total').addClass('bg-white');
                 $('.total').removeClass('addShadow');
-            }
-
+                $('.total').removeClass('pb-3');
+                $('.total').removeClass('me-xl-4');
+                $('.total').removeClass('me-xxl-0');
+            };
         }
 
         $.get('https://fakestoreapi.com/products',function(data){
@@ -174,7 +283,9 @@
                     };
                 });
                 toShow(productsFilter);
-            };
+            }else{
+                toShow(products);
+            }
         });
 
         $('#category').change( () => {
@@ -195,8 +306,14 @@
             let currentItemId = $(this).attr('data-id');
             let productInfo = products.filter( el => el.id == currentItemId)[0];
 
-            if($('.item-in-cart').toArray().map(el => el.getAttribute("data-id")).includes(currentItemId)){
-                alert('Already Added');
+            if($('.quantity').toArray().map(el => el.getAttribute("data-id")).includes(currentItemId)){
+                let a = $('.quantity').toArray().filter( el => el.getAttribute('data-id') == currentItemId)[0].getAttribute('value');
+                let b = $('.quantity').toArray().filter( el => el.getAttribute('data-id') == currentItemId)[0].getAttribute('unitPrice');
+                let newA = Number(a) + 1;
+                let newCost = b * newA;
+                $('.quantity').toArray().filter( el => el.getAttribute('data-id') == currentItemId)[0].setAttribute('value',`${newA}`);
+                $('.item-in-cart-cost').toArray().filter( el => el.getAttribute('data-id') == currentItemId)[0].textContent = `${newCost}`;
+
             }else{
                 $('#cart').append(`
                     <div class="card mb-3 shadow item-in-cart" data-id="${productInfo.id}">
@@ -208,8 +325,8 @@
                                 </button>
                             </div>
                             <p class="fw-bold mt-1">${productInfo.title}</p>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <div class="d-flex">
+                            <div class="d-flex justify-content-between align-items-end quantity-box">
+                                <div class="d-flex input-box">
                                     <button class="btn btn-outline-primary quantity-minus">
                                         <i class="fas fa-minus"></i>
                                     </button>
@@ -218,7 +335,7 @@
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
-                                <p class="m-0">$ <span class="item-in-cart-cost">${productInfo.price}</span></p>
+                                <p class="m-0">$ <span class="item-in-cart-cost" data-id="${productInfo.id}">${productInfo.price}</span></p>
                             </div>
                         </div>
                     </div>              
@@ -272,6 +389,12 @@
                 alert("Quantity can't be less than 1");
             };
 
+        });
+
+        $(window).on("load",function(){
+            $(".loader-container").fadeOut(500,function(){
+                $(this).remove();
+            });
         });
 
     </script>
